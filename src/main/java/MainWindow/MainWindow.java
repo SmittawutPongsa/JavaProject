@@ -195,6 +195,83 @@ public class MainWindow extends JFrame implements ActionListener {
 
         JPanel rightPanel = new JPanel(new GridLayout(1, 1));
         newUnitButton = new JButton("New Unit");
+        newUnitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField name = new JTextField();
+                JTextField hp = new JTextField();
+                JTextField atk = new JTextField();
+                JTextField range = new JTextField();
+                JTextField speed = new JTextField();
+                JButton selectImage = new JButton("Select Image");
+                JLabel imagePath = new JLabel();
+                JPanel messagePanel = new JPanel(new GridLayout(6, 2));
+                messagePanel.add(imagePath);
+                messagePanel.add(selectImage);
+                messagePanel.add(new JLabel("Name:"));
+                messagePanel.add(name);
+                messagePanel.add(new JLabel("HP"));
+                messagePanel.add(hp);
+                messagePanel.add(new JLabel("ATK"));
+                messagePanel.add(atk);
+                messagePanel.add(new JLabel("Range"));
+                messagePanel.add(range);
+                messagePanel.add(new JLabel("Speed"));
+                messagePanel.add(speed);
+                messagePanel.setPreferredSize(new Dimension(500, 300));
+                JScrollPane scrollMessage = new JScrollPane(messagePanel);
+
+                selectImage.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+
+                        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                            File source = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                            File destination = new File(DIRECTORY + File.separator + "Units" + File.separator + source.getName());
+
+                            try {
+                                InputStream in = new FileInputStream(source);
+                                OutputStream out = new FileOutputStream(destination);
+
+                                // Copy the bits from instream to outstream
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = in.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                                in.close();
+                                out.close();
+                            } catch (FileNotFoundException ex) {
+                                throw new RuntimeException(ex);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            imagePath.setIcon(new ImageIcon(new drawPolygonDemo(source).getTexture()));
+                        }
+                    }
+                });
+
+                Object[] message = {
+                        imagePath, selectImage,
+                        "Name: ", name,
+                        "hp: ", hp,
+                        "atk: ", atk,
+                        "range: ", range,
+                        "speed: ", speed
+                };
+                int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Unit", JOptionPane.OK_CANCEL_OPTION);
+                if(option == JOptionPane.OK_OPTION){
+                    try{
+                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "unitsData");
+
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
         deleteUnitButton = new JButton("Delete Unit");
         JPanel unitButtonPanel = new JPanel(new FlowLayout());
         unitButtonPanel.add(newUnitButton);

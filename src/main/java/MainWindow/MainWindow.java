@@ -220,6 +220,7 @@ public class MainWindow extends JFrame implements ActionListener {
                 messagePanel.add(speed);
                 messagePanel.setPreferredSize(new Dimension(500, 300));
                 JScrollPane scrollMessage = new JScrollPane(messagePanel);
+                final String[] unitSprite = {""};
 
                 selectImage.addActionListener(new ActionListener() {
                     @Override
@@ -230,7 +231,7 @@ public class MainWindow extends JFrame implements ActionListener {
                         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                             File source = new File(fileChooser.getSelectedFile().getAbsolutePath());
                             File destination = new File(DIRECTORY + File.separator + "Units" + File.separator + source.getName());
-
+                            unitSprite[0] = source.getName();
                             try {
                                 InputStream in = new FileInputStream(source);
                                 OutputStream out = new FileOutputStream(destination);
@@ -264,8 +265,18 @@ public class MainWindow extends JFrame implements ActionListener {
                 int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Unit", JOptionPane.OK_CANCEL_OPTION);
                 if(option == JOptionPane.OK_OPTION){
                     try{
-                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "unitsData");
+                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "UnitSprites" + File.separator + name.getText());
+                        String section = "main";
+                        file.setProperty(section, "name", name.getText());
+                        file.setProperty(section, "hp", hp.getText());
+                        file.setProperty(section, "atk", atk.getText());
+                        file.setProperty(section, "range", range.getText());
+                        file.setProperty(section, "speed", speed.getText());
+                        file.setProperty(section, "sprite", unitSprite[0]);
+                        file.save();
 
+                        unitMap.put(name.getText(), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + unitSprite[0])).getTexture()));
+                        unitModel.addElement(name.getText());
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -276,13 +287,14 @@ public class MainWindow extends JFrame implements ActionListener {
         JPanel unitButtonPanel = new JPanel(new FlowLayout());
         unitButtonPanel.add(newUnitButton);
         unitButtonPanel.add(deleteUnitButton);
-        JScrollPane unitScrollPane = new JScrollPane(unitList);
+
         JPanel unitPanel = new JPanel(new BorderLayout());
         unitPanel.add(unitButtonPanel, BorderLayout.NORTH);
         unitMap = new HashMap<>();
         unitModel = new DefaultListModel<>();
         unitList = new JList<>(unitModel);
-        unitList.setCellRenderer(new SpriteListRenderer());
+        unitList.setCellRenderer(new UnitListRenderer());
+        JScrollPane unitScrollPane = new JScrollPane(unitList);
         unitPanel.add(unitScrollPane, BorderLayout.CENTER);
         rightPanel.add(unitPanel);
         rightPanel.setMaximumSize(new Dimension(300, 2000));
@@ -307,11 +319,16 @@ public class MainWindow extends JFrame implements ActionListener {
         if(!directory.exists()) {
             directory.mkdirs();
         }
+        File tempFile;
         for(String subDir : subDirectories){
-            File temp = new File(directory.getAbsolutePath() + File.separator + subDir);
-            if(!temp.exists()){
-                temp.mkdirs();
+            tempFile = new File(directory.getAbsolutePath() + File.separator + subDir);
+            if(!tempFile.exists()){
+                tempFile.mkdirs();
             }
+        }
+        tempFile = new File(directory.getAbsolutePath() + File.separator + "Units" + File.separator + "UnitSprites");
+        if(!tempFile.exists()){
+            tempFile.mkdirs();
         }
         File[] maps = new File(DIRECTORY + File.separator + "Maps").listFiles();
         try {
@@ -337,6 +354,17 @@ public class MainWindow extends JFrame implements ActionListener {
         for(File sprite : sprites){
             spriteMap.put(sprite.getName(), new ImageIcon(new drawPolygonDemo(sprite).getTexture()));
             spriteListModel.addElement(sprite.getName());
+        }
+
+        File[] units = new File(DIRECTORY + File.separator + "Units").listFiles();
+        for(File unit : units){
+            try{
+                IniFile file = new IniFile(unit.getAbsolutePath());
+                unitMap.put(file.getProperty("main", "name"), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + "UnitSprites" + File.separator + file.getProperty("main", "sprite"))).getTexture()));
+                unitModel.addElement(file.getProperty("main", "name"));
+            }catch (IOException e){
+                System.out.println(e);
+            }
         }
 
         newMapButton.addActionListener(new ActionListener() {
@@ -436,6 +464,19 @@ public class MainWindow extends JFrame implements ActionListener {
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             label.setIcon(spriteMap.get((String) value));
+            label.setHorizontalTextPosition(JLabel.RIGHT);
+            label.setFont(font);
+            return label;
+        }
+    }
+
+    public class UnitListRenderer extends DefaultListCellRenderer {
+        Font font = new Font("helvitica", Font.BOLD, 24);
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            label.setIcon(unitMap.get((String) value));
             label.setHorizontalTextPosition(JLabel.RIGHT);
             label.setFont(font);
             return label;

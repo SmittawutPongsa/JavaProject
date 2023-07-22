@@ -230,7 +230,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
                         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                             File source = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                            File destination = new File(DIRECTORY + File.separator + "Units" + File.separator + source.getName());
+                            File destination = new File(DIRECTORY + File.separator + "Units" + File.separator + "UnitSprites" + File.separator + source.getName());
                             unitSprite[0] = source.getName();
                             try {
                                 InputStream in = new FileInputStream(source);
@@ -265,7 +265,7 @@ public class MainWindow extends JFrame implements ActionListener {
                 int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Unit", JOptionPane.OK_CANCEL_OPTION);
                 if(option == JOptionPane.OK_OPTION){
                     try{
-                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "UnitSprites" + File.separator + name.getText());
+                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + name.getText());
                         String section = "main";
                         file.setProperty(section, "name", name.getText());
                         file.setProperty(section, "hp", hp.getText());
@@ -275,7 +275,7 @@ public class MainWindow extends JFrame implements ActionListener {
                         file.setProperty(section, "sprite", unitSprite[0]);
                         file.save();
 
-                        unitMap.put(name.getText(), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + unitSprite[0])).getTexture()));
+                        unitMap.put(name.getText(), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + "UnitSprites" + File.separator + unitSprite[0])).getTexture()));
                         unitModel.addElement(name.getText());
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);

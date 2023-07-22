@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainWindow extends JFrame implements ActionListener {
-    public static String DIRECTORY = "C:\\Users\\User\\Desktop\\Project_test\\Demo";
+    public static String DIRECTORY = "C:\\Project HSRPG\\DEMO";
     public static String PROJECT_NAME = "Demo";
     //Menu related
     JMenuBar mainMenuBar;

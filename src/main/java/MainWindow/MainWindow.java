@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainWindow extends JFrame implements ActionListener {
-    public static String DIRECTORY = "C:\\Project HSRPG\\DEMO";
+    public static String DIRECTORY = "C:\\Project HSRPG\\7-project\\DEMO";
     public static String PROJECT_NAME = "Demo";
     //Menu related
     JMenuBar mainMenuBar;
@@ -33,15 +33,19 @@ public class MainWindow extends JFrame implements ActionListener {
     JTabbedPane tabbedPane;
     JButton newMapButton, deleteMapButton;
     JButton newSpriteButton, deleteSpriteButton;
-    JButton newUnitButton, deleteUnitButton;
+    JButton newPlayerButton, deletePlayerButton;
+    JButton newAttackerButton,deleteAttackerButton;
     JList<String> mapList;
     public static Map<String, ImageIcon> spriteMap;
-    public static Map<String, ImageIcon> unitMap;
+    public static Map<String, ImageIcon> playerMap;
+    public static Map<String,ImageIcon> attackerMap;
     JList<String> spriteList;
-    JList<String> unitList;
+    JList<String> playerList;
+    JList<String> attackerList;
     DefaultListModel<String> listModel;
     DefaultListModel<String> spriteListModel;
-    DefaultListModel<String> unitModel;
+    DefaultListModel<String> playerModel;
+    DefaultListModel <String> attackerModel;
     Map mapMap;
     public static String[] scrollPaneName = {"Overview", "Unit", "Event", "Sprite", "Terrain"};
     public  static String[] subDirectories = {"Maps", "Units", "Items", "Skills", "Sprites", "Events"};
@@ -49,7 +53,8 @@ public class MainWindow extends JFrame implements ActionListener {
     String[] spriteNames;
     public static String spriteSelected;
     static String mapSelected;
-    static String unitSelected;
+    static String playerSelected;
+    static String attackerSelected;
 
     public MainWindow(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,10 +87,11 @@ public class MainWindow extends JFrame implements ActionListener {
         this.setJMenuBar(mainMenuBar);
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setMaximumSize(new Dimension(300, 2000));
+        leftPanel.setMaximumSize(new Dimension(150, 2000));
         leftPanel.setLayout(new GridLayout(2, 1));
 
         JPanel spritePanel = new JPanel(new BorderLayout());
+        spritePanel.setMaximumSize(new Dimension(150,1000));
         newSpriteButton = new JButton("New Sprite");
         deleteSpriteButton = new JButton("Delete Sprite");
         JPanel spriteButtonPanel = new JPanel(new FlowLayout());
@@ -103,11 +109,11 @@ public class MainWindow extends JFrame implements ActionListener {
         leftPanel.add(spritePanel);
 
         JPanel mapListPanel = new JPanel();
+        mapListPanel.setMaximumSize(new Dimension(150,1000));
         mapListPanel.setLayout(new BorderLayout());
 
         newMapButton = new JButton("New Map");
         deleteMapButton = new JButton("Delete Map");
-
 
         mapMap = new HashMap();
         listModel = new DefaultListModel<>();
@@ -192,36 +198,50 @@ public class MainWindow extends JFrame implements ActionListener {
         tabbedPane.addTab("Event", scrollPane[2]);
         tabbedPane.addTab("Sprite", scrollPane[3]);
         tabbedPane.addTab("Terrain", scrollPane[4]);
+        JPanel gpane =new JPanel();
+        tabbedPane.add("Render",gpane);
+        JButton run = new JButton("Run");
+        JButton build =new JButton("Build");
+        JButton download = new JButton("Download");
 
-        JPanel rightPanel = new JPanel(new GridLayout(1, 1));
-        newUnitButton = new JButton("New Unit");
-        newUnitButton.addActionListener(new ActionListener() {
+        gpane.add(run);
+        gpane.add(build);
+        gpane.add(download);
+
+
+
+
+        JPanel rightPanel = new JPanel(new GridLayout(2, 1));
+        rightPanel.setMaximumSize(new Dimension(150,2000));
+        newPlayerButton = new JButton("New Player");
+        newAttackerButton = new JButton("New Attacker");
+        newAttackerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JTextField name = new JTextField();
-                JTextField hp = new JTextField();
+//                JTextField hp = new JTextField();
                 JTextField atk = new JTextField();
-                JTextField range = new JTextField();
-                JTextField speed = new JTextField();
+//                JTextField range = new JTextField();
+//                JTextField speed = new JTextField();
                 JButton selectImage = new JButton("Select Image");
                 JLabel imagePath = new JLabel();
-                JPanel messagePanel = new JPanel(new GridLayout(6, 2));
+                JPanel messagePanel = new JPanel(new GridLayout(3, 2));
+                messagePanel.setMaximumSize(new Dimension(100,1000));
                 messagePanel.add(imagePath);
                 messagePanel.add(selectImage);
                 messagePanel.add(new JLabel("Name:"));
                 messagePanel.add(name);
-                messagePanel.add(new JLabel("HP"));
-                messagePanel.add(hp);
+//                messagePanel.add(new JLabel("HP"));
+//                messagePanel.add(hp);
                 messagePanel.add(new JLabel("ATK"));
                 messagePanel.add(atk);
-                messagePanel.add(new JLabel("Range"));
-                messagePanel.add(range);
-                messagePanel.add(new JLabel("Speed"));
-                messagePanel.add(speed);
-                messagePanel.setPreferredSize(new Dimension(500, 300));
+//                messagePanel.add(new JLabel("Range"));
+//                messagePanel.add(range);
+//                messagePanel.add(new JLabel("Speed"));
+//                messagePanel.add(speed);
+                messagePanel.setPreferredSize(new Dimension(250, 150));
                 JScrollPane scrollMessage = new JScrollPane(messagePanel);
-                final String[] unitSprite = {""};
-
+                final String[] attackerSprite = {""};
                 selectImage.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -231,7 +251,7 @@ public class MainWindow extends JFrame implements ActionListener {
                         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                             File source = new File(fileChooser.getSelectedFile().getAbsolutePath());
                             File destination = new File(DIRECTORY + File.separator + "Units" + File.separator + source.getName());
-                            unitSprite[0] = source.getName();
+                            attackerSprite[0] = source.getName();
                             try {
                                 InputStream in = new FileInputStream(source);
                                 OutputStream out = new FileOutputStream(destination);
@@ -253,51 +273,155 @@ public class MainWindow extends JFrame implements ActionListener {
                         }
                     }
                 });
-
                 Object[] message = {
                         imagePath, selectImage,
                         "Name: ", name,
-                        "hp: ", hp,
+//                        "hp: ", hp,
                         "atk: ", atk,
-                        "range: ", range,
-                        "speed: ", speed
+//                        "range: ", range,
+//                        "speed: ", speed
                 };
-                int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Unit", JOptionPane.OK_CANCEL_OPTION);
+                int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Attacker", JOptionPane.OK_CANCEL_OPTION);
                 if(option == JOptionPane.OK_OPTION){
                     try{
-                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "UnitSprites" + File.separator + name.getText());
+                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "AttackerSprites" + File.separator + name.getText());
                         String section = "main";
                         file.setProperty(section, "name", name.getText());
-                        file.setProperty(section, "hp", hp.getText());
+//                        file.setProperty(section, "hp", hp.getText());
                         file.setProperty(section, "atk", atk.getText());
-                        file.setProperty(section, "range", range.getText());
-                        file.setProperty(section, "speed", speed.getText());
-                        file.setProperty(section, "sprite", unitSprite[0]);
+//                        file.setProperty(section, "range", range.getText());
+//                        file.setProperty(section, "speed", speed.getText());
+                        file.setProperty(section, "sprite", attackerSprite[0]);
                         file.save();
 
-                        unitMap.put(name.getText(), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + unitSprite[0])).getTexture()));
-                        unitModel.addElement(name.getText());
+                        attackerMap.put(name.getText(), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + attackerSprite[0])).getTexture()));
+                        attackerModel.addElement(name.getText());
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
             }
         });
-        deleteUnitButton = new JButton("Delete Unit");
-        JPanel unitButtonPanel = new JPanel(new FlowLayout());
-        unitButtonPanel.add(newUnitButton);
-        unitButtonPanel.add(deleteUnitButton);
+
+        newPlayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField name = new JTextField();
+                JTextField hp = new JTextField();
+//                JTextField atk = new JTextField();
+//                JTextField range = new JTextField();
+//                JTextField speed = new JTextField();
+                JButton selectImage = new JButton("Select Image");
+                JLabel imagePath = new JLabel();
+                JPanel messagePanel = new JPanel(new GridLayout(3, 2));
+                messagePanel.setMaximumSize(new Dimension(100,1000));
+                messagePanel.add(imagePath);
+                messagePanel.add(selectImage);
+                messagePanel.add(new JLabel("Name:"));
+                messagePanel.add(name);
+                messagePanel.add(new JLabel("HP"));
+                messagePanel.add(hp);
+//                messagePanel.add(new JLabel("ATK"));
+//                messagePanel.add(atk);
+//                messagePanel.add(new JLabel("Range"));
+//                messagePanel.add(range);
+//                messagePanel.add(new JLabel("Speed"));
+//                messagePanel.add(speed);
+                messagePanel.setPreferredSize(new Dimension(250, 150));
+                JScrollPane scrollMessage = new JScrollPane(messagePanel);
+                final String[] playerSprite = {""};
+
+                selectImage.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+
+                        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                            File source = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                            File destination = new File(DIRECTORY + File.separator + "Units" + File.separator + source.getName());
+                            playerSprite[0] = source.getName();
+                            try {
+                                InputStream in = new FileInputStream(source);
+                                OutputStream out = new FileOutputStream(destination);
+
+                                // Copy the bits from instream to outstream
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = in.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                                in.close();
+                                out.close();
+                            } catch (FileNotFoundException ex) {
+                                throw new RuntimeException(ex);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            imagePath.setIcon(new ImageIcon(new drawPolygonDemo(source).getTexture()));
+                        }
+                    }
+                });
+                Object[] message = {
+                        imagePath, selectImage,
+                        "Name: ", name,
+                        "hp: ", hp,
+//                        "atk: ", atk,
+//                        "range: ", range,
+//                        "speed: ", speed
+                };
+                int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Player", JOptionPane.OK_CANCEL_OPTION);
+                if(option == JOptionPane.OK_OPTION){
+                    try{
+                        IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "PlayerSprites" + File.separator + name.getText());
+                        String section = "main";
+                        file.setProperty(section, "name", name.getText());
+                        file.setProperty(section, "hp", hp.getText());
+//                        file.setProperty(section, "atk", atk.getText());
+//                        file.setProperty(section, "range", range.getText());
+//                        file.setProperty(section, "speed", speed.getText());
+                        file.setProperty(section, "sprite", playerSprite[0]);
+                        file.save();
+
+                        playerMap.put(name.getText(), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + playerSprite[0])).getTexture()));
+                        playerModel.addElement(name.getText());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
+        deletePlayerButton = new JButton("Delete Player");
+        JPanel playerButtonPanel = new JPanel(new FlowLayout());
+        playerButtonPanel.add(newPlayerButton);
+        playerButtonPanel.add(deletePlayerButton);
 
         JPanel unitPanel = new JPanel(new BorderLayout());
-        unitPanel.add(unitButtonPanel, BorderLayout.NORTH);
-        unitMap = new HashMap<>();
-        unitModel = new DefaultListModel<>();
-        unitList = new JList<>(unitModel);
-        unitList.setCellRenderer(new UnitListRenderer());
-        JScrollPane unitScrollPane = new JScrollPane(unitList);
+        unitPanel.add(playerButtonPanel, BorderLayout.NORTH);
+        playerMap = new HashMap<>();
+        playerModel = new DefaultListModel<>();
+        playerList = new JList<>(playerModel);
+        playerList.setCellRenderer(new playerListRenderer());
+        JScrollPane unitScrollPane = new JScrollPane(playerList);
         unitPanel.add(unitScrollPane, BorderLayout.CENTER);
         rightPanel.add(unitPanel);
-        rightPanel.setMaximumSize(new Dimension(300, 2000));
+        rightPanel.setMaximumSize(new Dimension(150, 2000));
+
+        deleteAttackerButton = new JButton("Delete Attacker");
+        JPanel attackerButtonPanel = new JPanel(new FlowLayout());
+        attackerButtonPanel.add(newAttackerButton);
+        attackerButtonPanel.add(deleteAttackerButton);
+
+        JPanel attackerPanel = new JPanel(new BorderLayout());
+        attackerPanel.add(attackerButtonPanel, BorderLayout.NORTH);
+        attackerMap = new HashMap<>();
+        attackerModel = new DefaultListModel<>();
+        attackerList = new JList<>(attackerModel);
+        attackerList.setCellRenderer(new attackerListRenderer());
+        JScrollPane attackerScrollPane = new JScrollPane(attackerList);
+        attackerPanel.add(attackerScrollPane, BorderLayout.CENTER);
+        rightPanel.add(attackerPanel);
+        rightPanel.setMaximumSize(new Dimension(150, 2000));
 
         this.add(leftPanel, BorderLayout.WEST);
         this.add(tabbedPane, BorderLayout.CENTER);
@@ -326,7 +450,12 @@ public class MainWindow extends JFrame implements ActionListener {
                 tempFile.mkdirs();
             }
         }
-        tempFile = new File(directory.getAbsolutePath() + File.separator + "Units" + File.separator + "UnitSprites");
+
+        tempFile = new File(directory.getAbsolutePath() + File.separator + "Units" + File.separator + "PlayerSprites");
+        if(!tempFile.exists()){
+            tempFile.mkdirs();
+        }
+        tempFile = new File(directory.getAbsolutePath() + File.separator + "Units" + File.separator + "AttackerSprites");
         if(!tempFile.exists()){
             tempFile.mkdirs();
         }
@@ -355,18 +484,26 @@ public class MainWindow extends JFrame implements ActionListener {
             spriteMap.put(sprite.getName(), new ImageIcon(new drawPolygonDemo(sprite).getTexture()));
             spriteListModel.addElement(sprite.getName());
         }
-
-        File[] units = new File(DIRECTORY + File.separator + "Units").listFiles();
-        for(File unit : units){
+        File[] playerUnits = new File(DIRECTORY + File.separator + "Units"+File.separator+"PlayerSprites").listFiles();
+        for(File unit : playerUnits ){
             try{
                 IniFile file = new IniFile(unit.getAbsolutePath());
-                unitMap.put(file.getProperty("main", "name"), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + "UnitSprites" + File.separator + file.getProperty("main", "sprite"))).getTexture()));
-                unitModel.addElement(file.getProperty("main", "name"));
+                playerMap.put(file.getProperty("main", "name"), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + file.getProperty("main", "sprite"))).getTexture()));
+                playerModel.addElement(file.getProperty("main", "name"));
             }catch (IOException e){
                 System.out.println(e);
             }
         }
-
+        File[] attackerUnits = new File(DIRECTORY + File.separator + "Units"+File.separator+"AttackerSprites").listFiles();
+        for(File unit : attackerUnits){
+            try{
+                IniFile file = new IniFile(unit.getAbsolutePath());
+                attackerMap.put(file.getProperty("main", "name"), new ImageIcon(new drawPolygonDemo(new File(DIRECTORY + File.separator + "Units" + File.separator + file.getProperty("main", "sprite"))).getTexture()));
+                attackerModel.addElement(file.getProperty("main", "name"));
+            }catch (IOException e){
+                System.out.println(e);
+            }
+        }
         newMapButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -441,6 +578,32 @@ public class MainWindow extends JFrame implements ActionListener {
 
             }
         });
+        deletePlayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playerSelected = playerList.getSelectedValue();
+                if(JOptionPane.showConfirmDialog(getParent(), "Delete " + playerSelected + "?", "Comfirmation", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
+                    File file = new File(DIRECTORY + File.separator + "Units" + File.separator+"PlayerSprites"+File.separator + playerSelected);
+                    playerModel.removeElement(playerSelected);
+                    file.delete();
+                    playerList.updateUI();
+                }
+
+            }
+        });
+        deleteAttackerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                attackerSelected = attackerList.getSelectedValue();
+                if(JOptionPane.showConfirmDialog(getParent(), "Delete " + attackerSelected + "?", "Comfirmation", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
+                    File file = new File(DIRECTORY + File.separator + "Units" + File.separator+"AttackerSprites"+File.separator + attackerSelected);
+                    attackerModel.removeElement(attackerSelected);
+                    file.delete();
+                    attackerList.updateUI();
+                }
+
+            }
+        });
 
         deleteMapButton.addActionListener(new ActionListener() {
             @Override
@@ -458,7 +621,7 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     public class SpriteListRenderer extends DefaultListCellRenderer {
-        Font font = new Font("helvitica", Font.BOLD, 24);
+        Font font = new Font("helvitica", Font.BOLD, 16);
 
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -469,14 +632,25 @@ public class MainWindow extends JFrame implements ActionListener {
             return label;
         }
     }
-
-    public class UnitListRenderer extends DefaultListCellRenderer {
-        Font font = new Font("helvitica", Font.BOLD, 24);
+    public class attackerListRenderer extends DefaultListCellRenderer {
+        Font font = new Font("helvitica", Font.BOLD, 16);
 
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            label.setIcon(unitMap.get((String) value));
+            label.setIcon(attackerMap.get((String) value));
+            label.setHorizontalTextPosition(JLabel.RIGHT);
+            label.setFont(font);
+            return label;
+        }
+    }
+    public class playerListRenderer extends DefaultListCellRenderer {
+        Font font = new Font("helvitica", Font.BOLD, 16);
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            label.setIcon(playerMap.get((String) value));
             label.setHorizontalTextPosition(JLabel.RIGHT);
             label.setFont(font);
             return label;
@@ -525,7 +699,6 @@ public class MainWindow extends JFrame implements ActionListener {
 
                 System.out.println(DIRECTORY);
                 System.out.println(PROJECT_NAME);
-
                 //startProject();
             }
         }

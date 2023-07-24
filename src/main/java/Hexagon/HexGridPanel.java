@@ -21,6 +21,7 @@ public class HexGridPanel extends JPanel {
     String filePath = "";
     String filename = "test";
     String type = "";
+    JButton start,end;
 
     public HexGridPanel() throws IOException {
         super();
@@ -123,7 +124,7 @@ public class HexGridPanel extends JPanel {
                             System.out.println(e);
                         }
                     }
-                    if (type == "Overview" || type == "Terrain") {
+                    if (type == "Overview" || type == "Terrain" ) {
                         try {
                             IniFile temp = new IniFile(filePath);
                             Boolean canPassed = Boolean.valueOf(temp.getProperty("Terrain", key));
@@ -183,18 +184,31 @@ public class HexGridPanel extends JPanel {
                 }
             }
             String key = Integer.toString(keyX) + "," + Integer.toString(keyY);
+            if(mode == 1){
+                if (keyX != null && keyY != null){
+                    try{
+                        IniFile temp = new IniFile(filePath);
+                        temp.setProperty("main", key, String.valueOf(spriteSelected));
+                        temp.save();
+                        repaint();
+                    }catch (IOException ex){
+                        System.out.println(ex);
+                    }
+                }
+            }
             if(mode == 2 && e.getClickCount() == 2){
                 try{
                     IniFile temp = new IniFile(filePath);
                     String old = temp.getProperty("Event", key);
-                    JTextArea event = new JTextArea(40, 100);
-                    event.setText(old);
+                    // Change Into Start and End
+                    JTextArea eventText=new JTextArea(20,40);
+                    eventText.setText(old);
                     Object[] message = {
-                            "event:", event
+                            "event:", eventText
                     };
                     int option = JOptionPane.showConfirmDialog(getParent(), message, "Event " + key, JOptionPane.OK_CANCEL_OPTION);
                     if(option == JOptionPane.OK_OPTION){
-                        temp.setProperty("Event", key, event.getText());
+                        temp.setProperty("Event", key, eventText.getText());
                         temp.save();
                         repaint();
                     }

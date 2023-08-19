@@ -29,7 +29,7 @@ public class GameWindow extends Main{
         // Configure GLFW
         glfwDefaultWindowHints(); // Optional, but recommended: the current window hints are already the default.
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation.
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable.
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // The window will be resizable.
 
         // Create the window
         window = glfwCreateWindow(800, 600, "Simple Game Window", 0, 0);

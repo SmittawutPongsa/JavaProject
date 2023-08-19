@@ -69,10 +69,14 @@ public class MainWindow extends JFrame implements ActionListener {
         mainMenuBar = new JMenuBar();
 
         projectMenu = new JMenu("Project");
+        JMenu guide= new JMenu("Guide");
+        JMenuItem gdownload = new JMenuItem("Download");
 
         newProjectMenuItem = new JMenuItem("New Project");
         newProjectMenuItem.addActionListener(this);
         projectMenu.add(newProjectMenuItem);
+        gdownload.addActionListener(this);
+        guide.add(gdownload);
 
         openProjectMenuItem = new JMenuItem("Open Project");
         openProjectMenuItem.addActionListener(this);
@@ -85,6 +89,7 @@ public class MainWindow extends JFrame implements ActionListener {
         mapMenu.add(newMapMenuItem);
 
         mainMenuBar.add(projectMenu);
+        mainMenuBar.add(guide);
 
         this.setJMenuBar(mainMenuBar);
 

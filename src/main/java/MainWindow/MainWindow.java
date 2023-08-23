@@ -2,6 +2,8 @@ package MainWindow;
 
 import CellRenderer.MultiLineCellRenderer;
 import FileHandler.IniFile;
+import Game.GameWindow;
+import Game.Main;
 import Hexagon.HexGridPanel;
 import Test.drawPolygonDemo;
 
@@ -67,10 +69,14 @@ public class MainWindow extends JFrame implements ActionListener {
         mainMenuBar = new JMenuBar();
 
         projectMenu = new JMenu("Project");
+        JMenu guide= new JMenu("Guide");
+        JMenuItem gdownload = new JMenuItem("Download");
 
         newProjectMenuItem = new JMenuItem("New Project");
         newProjectMenuItem.addActionListener(this);
         projectMenu.add(newProjectMenuItem);
+        gdownload.addActionListener(this);
+        guide.add(gdownload);
 
         openProjectMenuItem = new JMenuItem("Open Project");
         openProjectMenuItem.addActionListener(this);
@@ -83,6 +89,7 @@ public class MainWindow extends JFrame implements ActionListener {
         mapMenu.add(newMapMenuItem);
 
         mainMenuBar.add(projectMenu);
+        mainMenuBar.add(guide);
 
         this.setJMenuBar(mainMenuBar);
 
@@ -208,10 +215,18 @@ public class MainWindow extends JFrame implements ActionListener {
         gpane.add(build);
         gpane.add(download);
 
+        run.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main gw=new Main();
+                gw.runWin();
+
+            }
+        });
 
 
-
-        JPanel rightPanel = new JPanel(new GridLayout(2, 1));
+                JPanel rightPanel = new JPanel(new GridLayout(2, 1));
         rightPanel.setMaximumSize(new Dimension(150,2000));
         newPlayerButton = new JButton("New Player");
         newAttackerButton = new JButton("New Attacker");

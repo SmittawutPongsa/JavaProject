@@ -1,6 +1,14 @@
 package Game;
 
 public class Main {
- GameWindow gw=new GameWindow();
+ public void runWin(){
+  GameWindow gameWindow=new GameWindow();
+  gameWindow.run();
+ }
+ public void build(){
 
+ }
+ public void download(){
+
+ }
 }

@@ -67,6 +67,14 @@ public class GameWindow extends Main{
             org.lwjgl.opengl.GL11.glClear(org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT);
 
             // Render here
+            // Render 2D elements
+            org.lwjgl.opengl.GL11.glBegin(org.lwjgl.opengl.GL11.GL_QUADS);
+            org.lwjgl.opengl.GL11.glColor3f(1.0f, 0.0f, 0.0f); // Set color to red
+            org.lwjgl.opengl.GL11.glVertex2f(100, 100); // Top-left vertex
+            org.lwjgl.opengl.GL11.glVertex2f(200, 100); // Top-right vertex
+            org.lwjgl.opengl.GL11.glVertex2f(200, 200); // Bottom-right vertex
+            org.lwjgl.opengl.GL11.glVertex2f(100, 200); // Bottom-left vertex
+            org.lwjgl.opengl.GL11.glEnd();
 
             // Swap the color buffer
             glfwSwapBuffers(window);

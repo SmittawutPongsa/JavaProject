@@ -66,7 +66,6 @@ public class GameWindow extends Main{
             // Clear the framebuffer
             org.lwjgl.opengl.GL11.glClear(org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT);
 
-            // Render here
             // Render 2D elements
             org.lwjgl.opengl.GL11.glBegin(org.lwjgl.opengl.GL11.GL_QUADS);
             org.lwjgl.opengl.GL11.glColor3f(1.0f, 0.0f, 0.0f); // Set color to red

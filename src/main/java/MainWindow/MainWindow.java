@@ -54,6 +54,8 @@ public class MainWindow extends JFrame implements ActionListener {
     public static Integer mode = 0;
     String[] spriteNames;
     public static String spriteSelected;
+    public static String playerUnitSelected, enemyUnitSelected;
+    public static int unitTypeSelected = -1;
     static String mapSelected;
     static String playerSelected;
     static String attackerSelected;
@@ -437,6 +439,24 @@ public class MainWindow extends JFrame implements ActionListener {
         attackerPanel.add(attackerScrollPane, BorderLayout.CENTER);
         rightPanel.add(attackerPanel);
         rightPanel.setMaximumSize(new Dimension(150, 2000));
+
+        playerList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                unitTypeSelected = 0;
+                attackerList.clearSelection();
+                playerUnitSelected = playerList.getSelectedValue();
+            }
+        });
+
+        attackerList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                unitTypeSelected = 1;
+                playerList.clearSelection();
+                enemyUnitSelected = attackerList.getSelectedValue();
+            }
+        });
 
         this.add(leftPanel, BorderLayout.WEST);
         this.add(tabbedPane, BorderLayout.CENTER);

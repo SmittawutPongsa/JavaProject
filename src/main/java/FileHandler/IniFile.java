@@ -35,6 +35,10 @@ public class IniFile {
         System.out.println("Set " + section + ":" + key + " = " + value);
     }
 
+    public void removeProperty(String section, String key){
+        properties.remove(section + "." + key);
+    }
+
     public void save() throws IOException {
         try (FileOutputStream fos = new FileOutputStream(filename)) {
             properties.store(fos, null);

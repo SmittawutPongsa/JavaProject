@@ -113,17 +113,7 @@ public class HexGridPanel extends JPanel {
                 String key = Integer.toString(j) + "," + Integer.toString(i);
                 if (grid.getHexagon().intersects(clipBounds)) {
                     Stroke stroke = new BasicStroke(SIZE / 20, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-                    if (type == "Overview" || type == "Event") {
-                        try{
-                            IniFile temp = new IniFile(filePath);
-                            if(temp.getProperty("Event", key).length() > 0){
-                                g2.setColor(Color.YELLOW);
-                                g2.fill(grid.getHexagon());
-                            }
-                        }catch (IOException e){
-                            System.out.println(e);
-                        }
-                    }
+
                     if (type == "Overview" || type == "Terrain" ) {
                         try {
                             IniFile temp = new IniFile(filePath);
@@ -135,7 +125,7 @@ public class HexGridPanel extends JPanel {
                             System.out.println(e);
                         }
                     }
-                    if (type == "Overview" || type == "Sprite") {
+                    if (type == "Overview" || type == "Sprite" || type == "Unit" || type == "Event") {
                         try {
                             IniFile temp = new IniFile(filePath);
                             ImageIcon imageIcon = spriteMap.get(temp.getProperty("Sprite", key));
@@ -146,6 +136,40 @@ public class HexGridPanel extends JPanel {
                                 Rectangle r = grid.getHexagon().getBounds();
                                 g.drawImage(bufferedImage, r.x, r.y, r.width, r.height, null);
                                 g2.setClip(null);
+                            }
+                        }catch (IOException e){
+                            System.out.println(e);
+                        }
+                    }
+
+                    if (type == "Overview" || type == "Unit"){
+                        try{
+                            IniFile temp = new IniFile(filePath);
+                            if(temp.getProperty("UnitType", key) != "") {
+                                int unitType = Integer.parseInt(temp.getProperty("UnitType", key));
+                                ImageIcon imageIcon = null;
+                                if(unitType == 0)   imageIcon = playerMap.get(temp.getProperty("Unit", key));
+                                if(unitType == 1)   imageIcon = attackerMap.get(temp.getProperty("Unit", key));
+                                if (imageIcon != null) {
+                                    Image image = imageIcon.getImage();
+                                    BufferedImage bufferedImage = (BufferedImage) image;
+                                    g2.setClip(grid.getHexagon());
+                                    Rectangle r = grid.getHexagon().getBounds();
+                                    g.drawImage(bufferedImage, r.x, r.y, r.width, r.height, null);
+                                    g2.setClip(null);
+                                }
+                            }
+                        }catch (IOException e){
+                            System.out.println(e);
+                        }
+                    }
+
+                    if (type == "Overview" || type == "Event") {
+                        try{
+                            IniFile temp = new IniFile(filePath);
+                            if(temp.getProperty("Event", key).length() > 0){
+                                g2.setColor(Color.YELLOW);
+                                g2.fill(grid.getHexagon());
                             }
                         }catch (IOException e){
                             System.out.println(e);
@@ -184,59 +208,94 @@ public class HexGridPanel extends JPanel {
                 }
             }
             String key = Integer.toString(keyX) + "," + Integer.toString(keyY);
-            if(mode == 1){
-                if (keyX != null && keyY != null){
-                    try{
-                        IniFile temp = new IniFile(filePath);
-                        temp.setProperty("main", key, String.valueOf(spriteSelected));
-                        temp.save();
-                        repaint();
-                    }catch (IOException ex){
-                        System.out.println(ex);
+            if(e.getButton() == MouseEvent.BUTTON1) {
+                if (mode == 1) {
+                    if (keyX != null && keyY != null && unitTypeSelected != -1) {
+                        try {
+                            IniFile temp = new IniFile(filePath);
+                            String unitSelected = "";
+                            if (unitTypeSelected == 0) {
+                                unitSelected = playerUnitSelected;
+                            }
+                            if (unitTypeSelected == 1) {
+                                unitSelected = enemyUnitSelected;
+                            }
+                            temp.setProperty("Unit", key, String.valueOf(unitSelected));
+                            temp.setProperty("UnitType", key, String.valueOf(unitTypeSelected));
+                            temp.save();
+                            repaint();
+                        } catch (IOException ex) {
+                            System.out.println(ex);
+                        }
                     }
                 }
-            }
-            if(mode == 2 && e.getClickCount() == 2){
-                try{
-                    IniFile temp = new IniFile(filePath);
-                    String old = temp.getProperty("Event", key);
-                    // Change Into Start and End
-                    JTextArea eventText=new JTextArea(20,40);
-                    eventText.setText(old);
-                    Object[] message = {
-                            "event:", eventText
-                    };
-                    int option = JOptionPane.showConfirmDialog(getParent(), message, "Event " + key, JOptionPane.OK_CANCEL_OPTION);
-                    if(option == JOptionPane.OK_OPTION){
-                        temp.setProperty("Event", key, eventText.getText());
-                        temp.save();
-                        repaint();
-                    }
-                }catch (IOException ex){
-                    System.out.println(ex);
-                }
-            }
-            if(mode == 3){
-                if (keyX != null && keyY != null){
-                    try{
-                        IniFile temp = new IniFile(filePath);
-                        temp.setProperty("Sprite", key, String.valueOf(spriteSelected));
-                        temp.save();
-                        repaint();
-                    }catch (IOException ex){
-                        System.out.println(ex);
-                    }
-                }
-            }
-            if(mode == 4){
-                if (keyX != null && keyY != null){
+                if (mode == 2 && e.getClickCount() == 2) {
                     try {
                         IniFile temp = new IniFile(filePath);
-                        Boolean last = Boolean.valueOf(temp.getProperty("Terrain", key));
-                        temp.setProperty("Terrain", key, String.valueOf(!last));
+                        String old = temp.getProperty("Event", key);
+                        // Change Into Start and End
+                        JTextArea eventText = new JTextArea(20, 40);
+                        eventText.setText(old);
+                        Object[] message = {
+                                "event:", eventText
+                        };
+                        int option = JOptionPane.showConfirmDialog(getParent(), message, "Event " + key, JOptionPane.OK_CANCEL_OPTION);
+                        if (option == JOptionPane.OK_OPTION) {
+                            temp.setProperty("Event", key, eventText.getText());
+                            temp.save();
+                            repaint();
+                        }
+                    } catch (IOException ex) {
+                        System.out.println(ex);
+                    }
+                }
+                if (mode == 3) {
+                    if (keyX != null && keyY != null) {
+                        try {
+                            IniFile temp = new IniFile(filePath);
+                            temp.setProperty("Sprite", key, String.valueOf(spriteSelected));
+                            temp.save();
+                            repaint();
+                        } catch (IOException ex) {
+                            System.out.println(ex);
+                        }
+                    }
+                }
+                if (mode == 4) {
+                    if (keyX != null && keyY != null) {
+                        try {
+                            IniFile temp = new IniFile(filePath);
+                            Boolean last = Boolean.valueOf(temp.getProperty("Terrain", key));
+                            temp.setProperty("Terrain", key, String.valueOf(!last));
+                            temp.save();
+                            repaint();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                }
+            }
+
+            if(e.getButton() == MouseEvent.BUTTON3){
+                if(mode == 1){
+                    try{
+                        IniFile temp = new IniFile(filePath);
+                        temp.removeProperty("Unit", key);
+                        temp.removeProperty("UnitType", key);
                         temp.save();
                         repaint();
-                    } catch (IOException ex) {
+                    }catch (IOException ex){
+                        throw new RuntimeException(ex);
+                    }
+                }
+
+                if(mode == 3){
+                    try{
+                        IniFile temp = new IniFile(filePath);
+                        temp.removeProperty("Sprite", key);
+                        temp.save();
+                        repaint();
+                    }catch (IOException ex){
                         throw new RuntimeException(ex);
                     }
                 }

@@ -114,18 +114,8 @@ public class HexGridPanel extends JPanel {
                 if (grid.getHexagon().intersects(clipBounds)) {
                     Stroke stroke = new BasicStroke(SIZE / 20, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
-                    if (type == "Overview" || type == "Terrain" ) {
-                        try {
-                            IniFile temp = new IniFile(filePath);
-                            Boolean canPassed = Boolean.valueOf(temp.getProperty("Terrain", key));
-                            if (canPassed)  g2.setColor(Color.GREEN);
-                            else g2.setColor(Color.RED);
-                            g2.fill(grid.getHexagon());
-                        } catch (IOException e) {
-                            System.out.println(e);
-                        }
-                    }
-                    if (type == "Overview" || type == "Sprite" || type == "Unit" || type == "Event") {
+                    
+                    if (type == "Overview" || type == "Sprite" || type == "Unit" || type == "Event" || type == "Terrain") {
                         try {
                             IniFile temp = new IniFile(filePath);
                             ImageIcon imageIcon = spriteMap.get(temp.getProperty("Sprite", key));
@@ -142,7 +132,7 @@ public class HexGridPanel extends JPanel {
                         }
                     }
 
-                    if (type == "Overview" || type == "Unit"){
+                    if (type == "Overview" || type == "Unit" || type == "Terrain"){
                         try{
                             IniFile temp = new IniFile(filePath);
                             if(temp.getProperty("UnitType", key) != "") {
@@ -164,7 +154,7 @@ public class HexGridPanel extends JPanel {
                         }
                     }
 
-                    if (type == "Overview" || type == "Event") {
+                    if (type == "Overview" || type == "Event" || type == "Terrain") {
                         try{
                             IniFile temp = new IniFile(filePath);
                             if(temp.getProperty("Event", key).length() > 0){
@@ -172,6 +162,19 @@ public class HexGridPanel extends JPanel {
                                 g2.fill(grid.getHexagon());
                             }
                         }catch (IOException e){
+                            System.out.println(e);
+                        }
+                    }
+
+                    if (type == "Terrain" ) {
+                        try {
+                            IniFile temp = new IniFile(filePath);
+                            Boolean canPassed = Boolean.valueOf(temp.getProperty("Terrain", key));
+                            if (canPassed)  g2.setColor(Color.GREEN);
+                            else g2.setColor(Color.RED);
+                            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+                            g2.fill(grid.getHexagon());
+                        } catch (IOException e) {
                             System.out.println(e);
                         }
                     }

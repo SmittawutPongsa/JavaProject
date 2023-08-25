@@ -2,7 +2,6 @@ package MainWindow;
 
 import CellRenderer.MultiLineCellRenderer;
 import FileHandler.IniFile;
-import Game.GameWindow;
 import Game.Main;
 import Hexagon.HexGridPanel;
 import Test.drawPolygonDemo;
@@ -226,7 +225,7 @@ public class MainWindow extends JFrame implements ActionListener {
         });
 
 
-                JPanel rightPanel = new JPanel(new GridLayout(2, 1));
+        JPanel rightPanel = new JPanel(new GridLayout(2, 1));
         rightPanel.setMaximumSize(new Dimension(150,2000));
         newPlayerButton = new JButton("New Player");
         newAttackerButton = new JButton("New Attacker");

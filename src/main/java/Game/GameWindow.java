@@ -8,7 +8,6 @@ import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL15C.*;
 
 public class GameWindow extends Main{
@@ -22,9 +21,9 @@ public class GameWindow extends Main{
     }
 
     private void init() {
-//        // Set up an error callback. The default implementation will print the error message in System.err.
-//        GLFWErrorCallback.createPrint(System.err).set();
-//
+        // Set up an error callback. The default implementation will print the error message in System.err.
+        GLFWErrorCallback.createPrint(System.err).set();
+
 //        // Initialize GLFW. You must do this before most other GLFW functions.
 //        if (!glfwInit()) {
 //            throw new IllegalStateException("Unable to initialize GLFW.");
@@ -53,7 +52,7 @@ public class GameWindow extends Main{
 //
 //        // Make the window visible
 //        glfwShowWindow(window);
-//
+
 //        // This line is critical for LWJGL's interoperation with GLFW's OpenGL context, or any context that is managed externally.
 //        // LWJGL detects the context that is current in the current thread, creates the GLCapabilities instance and makes the OpenGL bindings available for use.
 //        GL.createCapabilities();
@@ -99,7 +98,6 @@ public class GameWindow extends Main{
             glBindBuffer(GL_ARRAY_BUFFER, glGenBuffers());
             glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(vertices.length).put(vertices).flip(), GL_STATIC_DRAW);
 
-
             // Draw textured quad using OpenGL commands
 //            glBegin(GL_QUADS);
 //            glTexCoord2f(0,0);
@@ -129,23 +127,20 @@ public class GameWindow extends Main{
 //            glfwPollEvents();
 //            // Clear the framebuffer to black color
 //            glClear(GL_COLOR_BUFFER_BIT);
-//            // Render 2D elements
-//            glBegin(GL_QUADS);
+//            // Render 2D element
 ////            glColor3f(1.0f, 0.0f, 0.0f); // Set color to red
-//            glTexCoord2f(0,0);
-//            glVertex2f(-0.5f, 0.5f); // Top-left vertex
-//            glTexCoord2f(0,1);
-//            glVertex2f(0.5f, 0.5f); // Top-right vertex
-//            glTexCoord2f(1,1);
-//            glVertex2f(0.5f, -0.5f); // Bottom-right vertex
-//            glTexCoord2f(1,0);
-//            glVertex2f(-0.5f, -0.5f); // Bottom-left vertex
-//            glEnd();
+//            org.lwjgl.opengl.GL11.glBegin(org.lwjgl.opengl.GL11.GL_QUADS);
+//            org.lwjgl.opengl.GL11.glColor3f(1.0f, 0.0f, 0.0f); // Set color to red
+//            org.lwjgl.opengl.GL11.glVertex2f(100, 100); // Top-left vertex
+//            org.lwjgl.opengl.GL11.glVertex2f(200, 100); // Top-right vertex
+//            org.lwjgl.opengl.GL11.glVertex2f(200, 200); // Bottom-right vertex
+//            org.lwjgl.opengl.GL11.glVertex2f(100, 200); // Bottom-left vertex
+//            org.lwjgl.opengl.GL11.glEnd();
 //            // Swap the color buffer
 //            glfwSwapBuffers(window);
 //        }
 //    }
-
+//
 //    private void cleanup() {
 //        // Free the window callbacks and destroy the window
 //        glfwFreeCallbacks(window);

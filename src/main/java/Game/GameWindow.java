@@ -6,8 +6,6 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
-import java.nio.FloatBuffer;
-
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
@@ -15,7 +13,7 @@ import static org.lwjgl.opengl.GL15C.*;
 
 public class GameWindow extends Main{
 
-    private long window;
+//    private long window;
 
     public void run() {
         init();
@@ -99,7 +97,7 @@ public class GameWindow extends Main{
                     0.5f, 0.5f, 1, 1,
                     -0.5f, 0.5f, 0, 1 };
             glBindBuffer(GL_ARRAY_BUFFER, glGenBuffers());
-            glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) BufferUtils.createFloatBuffer(vertices.length).put(vertices).flip(), GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(vertices.length).put(vertices).flip(), GL_STATIC_DRAW);
 
 
             // Draw textured quad using OpenGL commands

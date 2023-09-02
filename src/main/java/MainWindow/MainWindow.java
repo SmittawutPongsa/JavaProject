@@ -2,7 +2,6 @@ package MainWindow;
 
 import CellRenderer.MultiLineCellRenderer;
 import FileHandler.IniFile;
-import Game.GameWindow;
 import Game.Main;
 import Hexagon.HexGridPanel;
 import Test.drawPolygonDemo;

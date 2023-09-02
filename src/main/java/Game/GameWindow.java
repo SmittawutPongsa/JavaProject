@@ -1,15 +1,20 @@
 package Game;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.*;
+import org.lwjgl.system.*;
+import org.lwjgl.stb.*;
 
-import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
+import java.nio.*;
 
-public class GameWindow extends Main{
+public class GameWindow extends Main {
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
+    private static final String BACKGROUND_IMAGE_PATH = "src/assets/b2.png";
 
+    private int backgroundTexture;
     private long window;
+
 
     public void run() {
         init();
@@ -18,78 +23,121 @@ public class GameWindow extends Main{
     }
 
     private void init() {
-        // Setup an error callback. The default implementation will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
+        System.out.println("Image Path: " + BACKGROUND_IMAGE_PATH);
 
-        // Initialize GLFW. You must do this before most other GLFW functions.
-        if (!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW.");
+        if (!GLFW.glfwInit()) {
+            throw new IllegalStateException("Unable to initialize GLFW");
         }
 
-        // Configure GLFW
-        glfwDefaultWindowHints(); // Optional, but recommended: the current window hints are already the default.
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // The window will stay hidden after creation.
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // The window will be resizable.
+        GLFW.glfwDefaultWindowHints();
+        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE);
 
-        // Create the window
-        window = glfwCreateWindow(800, 600, "Simple Game Window", 0, 0);
+        window = GLFW.glfwCreateWindow(WIDTH, HEIGHT, "Game Window", 0, 0);
         if (window == 0) {
-            throw new RuntimeException("Failed to create the GLFW window.");
+            throw new RuntimeException("Failed to create the GLFW window");
         }
 
-        // Center the window on the screen
-        GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        glfwSetWindowPos(window, (vidMode.width() - 800) / 2, (vidMode.height() - 600) / 2);
+        GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+        GLFW.glfwSetWindowPos(
+                window,
+                (vidMode.width() - WIDTH) / 2,
+                (vidMode.height() - HEIGHT) / 2
+        );
 
-        // Make the OpenGL context current
-        glfwMakeContextCurrent(window);
+        GLFW.glfwMakeContextCurrent(window);
+        GLFW.glfwSwapInterval(1);
 
-        // Enable v-sync
-        glfwSwapInterval(1);
-
-        // Make the window visible
-        glfwShowWindow(window);
-
-        // This line is critical for LWJGL's interoperation with GLFW's OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread, creates the GLCapabilities instance and makes the OpenGL bindings available for use.
         GL.createCapabilities();
 
-        // Set the clear color (black in this case)
-        org.lwjgl.opengl.GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        try {
+            // Load the image
+            backgroundTexture = loadTexture(BACKGROUND_IMAGE_PATH);
+            System.out.println("Image Texture: " + backgroundTexture);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // White clear color
+
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, WIDTH, HEIGHT, 0, 1, -1);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+        GLFW.glfwShowWindow(window);
+    }
+
+    private int loadTexture(String path) {
+        int textureID = GL11.glGenTextures();
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+
+        ByteBuffer image;
+        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer compBuffer = BufferUtils.createIntBuffer(1);
+
+        image = STBImage.stbi_load(path, widthBuffer, heightBuffer, compBuffer, 4);
+
+        if (image == null) {
+            throw new RuntimeException("Failed to load a texture file: " + path);
+        }
+
+        int width = widthBuffer.get(0);
+        int height = heightBuffer.get(0);
+        System.out.println("Image Width: " + width);
+        System.out.println("Image Height: " + height);
+
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image);
+        STBImage.stbi_image_free(image);
+
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+        int errorCode = GL11.glGetError();
+        if (errorCode != GL11.GL_NO_ERROR) {
+            System.err.println("OpenGL Error Code (Texture Loading): " + errorCode);
+        }
+
+        return textureID;
     }
 
     private void loop() {
-        while (!glfwWindowShouldClose(window)) {
-            // Poll for events and handle the window close button
-            glfwPollEvents();
+        while (!GLFW.glfwWindowShouldClose(window)) {
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, backgroundTexture);
+            GL11.glBegin(GL11.GL_QUADS);
 
-            // Clear the framebuffer
-            org.lwjgl.opengl.GL11.glClear(org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT);
+            // Specify texture coordinates for each vertex
+            GL11.glTexCoord2f(0, 0); // Bottom-left
+            GL11.glVertex2f(0, 0);
 
-            // Render here
-            // Render 2D elements
-            org.lwjgl.opengl.GL11.glBegin(org.lwjgl.opengl.GL11.GL_QUADS);
-            org.lwjgl.opengl.GL11.glColor3f(1.0f, 0.0f, 0.0f); // Set color to red
-            org.lwjgl.opengl.GL11.glVertex2f(100, 100); // Top-left vertex
-            org.lwjgl.opengl.GL11.glVertex2f(200, 100); // Top-right vertex
-            org.lwjgl.opengl.GL11.glVertex2f(200, 200); // Bottom-right vertex
-            org.lwjgl.opengl.GL11.glVertex2f(100, 200); // Bottom-left vertex
-            org.lwjgl.opengl.GL11.glEnd();
+            GL11.glTexCoord2f(1, 0); // Bottom-right
+            GL11.glVertex2f(WIDTH, 0);
 
-            // Swap the color buffer
-            glfwSwapBuffers(window);
+            GL11.glTexCoord2f(1, 1); // Top-right
+            GL11.glVertex2f(WIDTH, HEIGHT);
+
+            GL11.glTexCoord2f(0, 1); // Top-left
+            GL11.glVertex2f(0, HEIGHT);
+
+            GL11.glEnd();
+
+            GLFW.glfwSwapBuffers(window);
+            GLFW.glfwPollEvents();
         }
     }
 
     private void cleanup() {
-        // Free the window callbacks and destroy the window
-        glfwFreeCallbacks(window);
-        glfwDestroyWindow(window);
+        GL11.glDeleteTextures(backgroundTexture);
 
-        // Terminate GLFW and free the error callback
-        glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        GLFW.glfwTerminate();
+        GLFW.glfwSetErrorCallback(null).free();
     }
-
 
 }

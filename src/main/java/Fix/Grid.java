@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Grid {
-    int x, y;
+    double x, y;
     Unit unit;
     ImageIcon sprite;
     Boolean canPassed;
     Polygon hexagon;
     Integer size = 30;
 
-    public Grid(int x, int y, Boolean canPassed, ImageIcon sprite, Unit unit){
+    public Grid(double x, double y, Boolean canPassed, ImageIcon sprite, Unit unit){
         this.x = x;
         this.y = y;
         this.canPassed = canPassed;

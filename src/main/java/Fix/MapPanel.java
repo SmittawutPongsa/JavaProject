@@ -19,11 +19,14 @@ public class MapPanel extends JPanel {
 
 
     public MapPanel(Map<String, ImageIcon> mapSprites, Map<String, ImageIcon> unitSprites, Map<String, Grid> grids, String[][] position){
+        super();
         this.mapSprites = mapSprites;
         this.unitSprites = unitSprites;
         this.grids = grids;
         this.position = position;
         this.canMoveTo = new ArrayList<Grid>();
+        setBackground(Color.WHITE);
+        setDoubleBuffered(true);
     }
 
     @Override

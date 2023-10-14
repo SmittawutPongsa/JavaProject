@@ -1,6 +1,7 @@
 package Fix;
 
 import FileHandler.IniFile;
+import Hexagon.HexGrid;
 import Test.drawPolygonDemo;
 
 import javax.swing.*;
@@ -59,15 +60,27 @@ public class MainWindow {
 
             position = new String[cols][rows];
 
+            int SIZE = 30;
+            double height = SIZE * 2;
+            double width = SIZE * Math.sqrt(3);
+            double x = width, y = 1.5 * SIZE;
+
             for(int i = 0; i < cols; i++){
+                x = width;
+                if (i % 2 == 1) {
+                    x += width / 2;
+                }
                 for(int j = 0; j < rows; j++){
                     String key = Integer.toString(j) + "," + Integer.toString(i);
                     position[i][j] = key;
                     Boolean canPassed = Boolean.valueOf(mapData.getProperty("Terrain", key));
                     ImageIcon sprite = mapSprites.get(mapData.getProperty("Sprite", key));
                     Unit unit = new Unit(units.get(mapData.getProperty("Unit", key)));
-                    grids.put(position[i][j], new Grid(i, j, canPassed, sprite, unit));
+
+                    grids.put(position[i][j], new Grid(x, y, canPassed, sprite, unit));
+                    x += width;
                 }
+                y += 1.5 * SIZE;
             }
         }catch (IOException e){
             System.out.println(e);

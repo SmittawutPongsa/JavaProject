@@ -39,7 +39,7 @@ public class MainWindow {
                 String type = data.getProperty(section, "type");
                 int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
                 int atk = Integer.parseInt(data.getProperty(section, "atk"));
-                int mov = Integer.parseInt(data.getProperty(section, "mov"));
+                int mov = Integer.parseInt(data.getProperty(section, "speed"));
                 int range = Integer.parseInt(data.getProperty(section, "range"));
                 ImageIcon sprite = unitSprites.get(data.getProperty(section, "sprite"));
 
@@ -75,7 +75,10 @@ public class MainWindow {
                     position[i][j] = key;
                     Boolean canPassed = Boolean.valueOf(mapData.getProperty("Terrain", key));
                     ImageIcon sprite = mapSprites.get(mapData.getProperty("Sprite", key));
-                    Unit unit = new Unit(units.get(mapData.getProperty("Unit", key)));
+                    Unit unit = null;
+                    if(units.get(mapData.getProperty("Unit", key)) != null){
+                        unit = new Unit(units.get(mapData.getProperty("Unit", key)));
+                    }
 
                     grids.put(position[i][j], new Grid(x, y, canPassed, sprite, unit));
                     x += width;

@@ -18,7 +18,7 @@ public class GameWindow extends Main{
     }
 
     private void init() {
-        // Setup an error callback. The default implementation will print the error message in System.err.
+        // Set up an error callback. The default implementation will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW. You must do this before most other GLFW functions.

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainWindow extends JFrame implements ActionListener {
-    public static String DIRECTORY = "C:\\Project HSRPG\\DEMO";
+    public static String DIRECTORY = "C:\\Project HSRPG\\7-project";
     public static String PROJECT_NAME = "Demo";
     //Menu related
     JMenuBar mainMenuBar;
@@ -236,27 +236,30 @@ public class MainWindow extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JTextField name = new JTextField();
-//                JTextField hp = new JTextField();
+                JTextField hp = new JTextField();
                 JTextField atk = new JTextField();
-//                JTextField range = new JTextField();
-//                JTextField speed = new JTextField();
+                JTextField range = new JTextField();
+                JTextField type=new JTextField();
+                JTextField speed = new JTextField();
                 JButton selectImage = new JButton("Select Image");
                 JLabel imagePath = new JLabel();
-                JPanel messagePanel = new JPanel(new GridLayout(3, 2));
+                JPanel messagePanel = new JPanel(new GridLayout(7, 1));
                 messagePanel.setMaximumSize(new Dimension(100,1000));
                 messagePanel.add(imagePath);
                 messagePanel.add(selectImage);
                 messagePanel.add(new JLabel("Name:"));
                 messagePanel.add(name);
-//                messagePanel.add(new JLabel("HP"));
-//                messagePanel.add(hp);
+                messagePanel.add(new JLabel("HP"));
+                messagePanel.add(hp);
                 messagePanel.add(new JLabel("ATK"));
                 messagePanel.add(atk);
-//                messagePanel.add(new JLabel("Range"));
-//                messagePanel.add(range);
-//                messagePanel.add(new JLabel("Speed"));
-//                messagePanel.add(speed);
-                messagePanel.setPreferredSize(new Dimension(250, 150));
+                messagePanel.add(new JLabel("TYPE"));
+                messagePanel.add(type);
+                messagePanel.add(new JLabel("Range"));
+                messagePanel.add(range);
+                messagePanel.add(new JLabel("Speed"));
+                messagePanel.add(speed);
+                messagePanel.setPreferredSize(new Dimension(350, 300));
                 JScrollPane scrollMessage = new JScrollPane(messagePanel);
                 final String[] attackerSprite = {""};
                 selectImage.addActionListener(new ActionListener() {
@@ -293,10 +296,11 @@ public class MainWindow extends JFrame implements ActionListener {
                 Object[] message = {
                         imagePath, selectImage,
                         "Name: ", name,
-//                        "hp: ", hp,
+                        "hp: ", hp,
                         "atk: ", atk,
-//                        "range: ", range,
-//                        "speed: ", speed
+                        "range: ", range,
+                        "type:  ", type,
+                        "speed: ", speed
                 };
                 int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Attacker", JOptionPane.OK_CANCEL_OPTION);
                 if(option == JOptionPane.OK_OPTION){
@@ -304,10 +308,11 @@ public class MainWindow extends JFrame implements ActionListener {
                         IniFile file = new IniFile(DIRECTORY + File.separator + "Units" + File.separator + "AttackerSprites" + File.separator + name.getText());
                         String section = "main";
                         file.setProperty(section, "name", name.getText());
-//                        file.setProperty(section, "hp", hp.getText());
+                        file.setProperty(section, "hp", hp.getText());
                         file.setProperty(section, "atk", atk.getText());
-//                        file.setProperty(section, "range", range.getText());
-//                        file.setProperty(section, "speed", speed.getText());
+                        file.setProperty(section, "type", type.getText());
+                        file.setProperty(section, "range", range.getText());
+                        file.setProperty(section, "speed", speed.getText());
                         file.setProperty(section, "sprite", attackerSprite[0]);
                         file.save();
 
@@ -325,26 +330,29 @@ public class MainWindow extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 JTextField name = new JTextField();
                 JTextField hp = new JTextField();
-//                JTextField atk = new JTextField();
-//                JTextField range = new JTextField();
-//                JTextField speed = new JTextField();
+                JTextField atk = new JTextField();
+                JTextField type=new JTextField();
+                JTextField range = new JTextField();
+                JTextField speed = new JTextField();
                 JButton selectImage = new JButton("Select Image");
                 JLabel imagePath = new JLabel();
-                JPanel messagePanel = new JPanel(new GridLayout(3, 2));
-                messagePanel.setMaximumSize(new Dimension(100,1000));
+                JPanel messagePanel = new JPanel(new GridLayout(7, 1));
+                messagePanel.setMaximumSize(new Dimension(250,100));
                 messagePanel.add(imagePath);
                 messagePanel.add(selectImage);
                 messagePanel.add(new JLabel("Name:"));
                 messagePanel.add(name);
                 messagePanel.add(new JLabel("HP"));
                 messagePanel.add(hp);
-//                messagePanel.add(new JLabel("ATK"));
-//                messagePanel.add(atk);
-//                messagePanel.add(new JLabel("Range"));
-//                messagePanel.add(range);
-//                messagePanel.add(new JLabel("Speed"));
-//                messagePanel.add(speed);
-                messagePanel.setPreferredSize(new Dimension(250, 150));
+                messagePanel.add(new JLabel("ATK"));
+                messagePanel.add(atk);
+                messagePanel.add(new JLabel("TYPE"));
+                messagePanel.add(type);
+                messagePanel.add(new JLabel("Range"));
+                messagePanel.add(range);
+                messagePanel.add(new JLabel("Speed"));
+                messagePanel.add(speed);
+                messagePanel.setPreferredSize(new Dimension(350, 300));
                 JScrollPane scrollMessage = new JScrollPane(messagePanel);
                 final String[] playerSprite = {""};
 
@@ -383,9 +391,10 @@ public class MainWindow extends JFrame implements ActionListener {
                         imagePath, selectImage,
                         "Name: ", name,
                         "hp: ", hp,
-//                        "atk: ", atk,
-//                        "range: ", range,
-//                        "speed: ", speed
+                        "atk: ", atk,
+                        "type",type,
+                        "range: ", range,
+                        "speed: ", speed
                 };
                 int option = JOptionPane.showConfirmDialog(getParent(), scrollMessage, "New Player", JOptionPane.OK_CANCEL_OPTION);
                 if(option == JOptionPane.OK_OPTION){
@@ -394,9 +403,10 @@ public class MainWindow extends JFrame implements ActionListener {
                         String section = "main";
                         file.setProperty(section, "name", name.getText());
                         file.setProperty(section, "hp", hp.getText());
-//                        file.setProperty(section, "atk", atk.getText());
-//                        file.setProperty(section, "range", range.getText());
-//                        file.setProperty(section, "speed", speed.getText());
+                        file.setProperty(section, "atk", atk.getText());
+                        file.setProperty(section, "type", type.getText());
+                        file.setProperty(section, "range", range.getText());
+                        file.setProperty(section, "speed", speed.getText());
                         file.setProperty(section, "sprite", playerSprite[0]);
                         file.save();
 

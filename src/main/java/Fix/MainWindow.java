@@ -34,42 +34,42 @@ public class MainWindow {
             ImageIcon sprite = new ImageIcon(new drawPolygonDemo(file).getTexture());
             unitSprites.put(file.getName(), sprite);
         }
-        /*
+/*
         for(File file : unitFiles){
             try {
                 IniFile data = new IniFile(file.getAbsolutePath());
                 String section = "main";
                 String name = data.getProperty(section, "name");
-                String type = data.getProperty(section, "type");
+                int type = Integer.parseInt(data.getProperty(section, "type"));
                 int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
                 int atk = Integer.parseInt(data.getProperty(section, "atk"));
                 int mov = Integer.parseInt(data.getProperty(section, "speed"));
                 int range = Integer.parseInt(data.getProperty(section, "range"));
                 ImageIcon sprite = unitSprites.get(data.getProperty(section, "sprite"));
 
-                Unit unit = new Unit(name, sprite, maxHp, atk, mov, range, type);
+                Unit unit = new Unit(name, sprite, maxHp, atk, mov, range,type);
                 units.put(name, unit);
             }catch (IOException e){
                 System.out.println(e);
             }
         }
-        */
+*/
 
         for(File file : playerFiles){
             try{
                 IniFile data = new IniFile(file.getAbsolutePath());
                 String section = "main";
                 String name = data.getProperty(section, "name");
-                //int type = data.getProperty(section, "type");
-                //int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
-                //int atk = Integer.parseInt(data.getProperty(section, "atk"));
-                //int mov = Integer.parseInt(data.getProperty(section, "speed"));
-                //int range = Integer.parseInt(data.getProperty(section, "range"));
-                int type = 0;
-                int maxHp = 10;
-                int atk = 5;
-                int mov = 2;
-                int range = 2;
+                int type = Integer.parseInt(data.getProperty(section, "type"));
+                int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
+                int atk = Integer.parseInt(data.getProperty(section, "atk"));
+                int mov = Integer.parseInt(data.getProperty(section, "speed"));
+                int range = Integer.parseInt(data.getProperty(section, "range"));
+//                int type = 0;
+//                int maxHp = 10;
+//                int atk = 5;
+//                int mov = 2;
+//                int range = 2;
                 ImageIcon sprite = unitSprites.get(data.getProperty(section, "sprite"));
 
                 Unit unit = new Unit(name, sprite, maxHp, atk, mov, range, type);
@@ -84,16 +84,16 @@ public class MainWindow {
                 IniFile data = new IniFile(file.getAbsolutePath());
                 String section = "main";
                 String name = data.getProperty(section, "name");
-                //int type = data.getProperty(section, "type");
-                //int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
-                //int atk = Integer.parseInt(data.getProperty(section, "atk"));
-                //int mov = Integer.parseInt(data.getProperty(section, "speed"));
-                //int range = Integer.parseInt(data.getProperty(section, "range"));
-                int type = 1;
-                int maxHp = 10;
-                int atk = 5;
-                int mov = 2;
-                int range = 2;
+                int type = Integer.parseInt(data.getProperty(section, "type"));
+                int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
+                int atk = Integer.parseInt(data.getProperty(section, "atk"));
+                int mov = Integer.parseInt(data.getProperty(section, "speed"));
+                int range = Integer.parseInt(data.getProperty(section, "range"));
+//                int type = 1;
+//                int maxHp = 10;
+//                int atk = 5;
+//                int mov = 2;
+//                int range = 2;
                 ImageIcon sprite = unitSprites.get(data.getProperty(section, "sprite"));
 
                 Unit unit = new Unit(name, sprite, maxHp, atk, mov, range, type);

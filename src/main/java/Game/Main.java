@@ -1,9 +1,11 @@
 package Game;
 
+
+import Fix.MainWindow;
+
 public class Main {
  public void runWin(){
-  GameWindow gameWindow=new GameWindow();
-  gameWindow.run();
+  MainWindow window = new MainWindow("C:\\Project HSRPG\\7-project\\", "MAP");
  }
  public void build(){
 

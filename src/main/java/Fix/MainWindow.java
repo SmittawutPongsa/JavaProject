@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainWindow {
+
     public MainWindow(String directory, String mapName){
         File mapFile = new File(directory + File.separator + "Maps" + File.separator + mapName);
         File[] mapSpriteFiles = new File(directory + File.separator + "Sprites").listFiles();
@@ -144,8 +145,11 @@ public class MainWindow {
             System.out.println(e);
         }
 
+
+
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Game Window");
         frame.setSize(new Dimension(800, 600));
 
         MapPanel panel = new MapPanel(mapSprites, unitSprites, grids, position);

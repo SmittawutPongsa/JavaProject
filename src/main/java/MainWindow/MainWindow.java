@@ -215,6 +215,7 @@ public class MainWindow extends JFrame implements ActionListener {
         JPanel gpane = new JPanel();
         tabbedPane.add("Render", gpane);
         JButton run = new JButton("Run");
+
         JButton build = new JButton("Build");
         JButton download = new JButton("Download");
 
@@ -225,8 +226,7 @@ public class MainWindow extends JFrame implements ActionListener {
         run.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main gw = new Main();
-                gw.runWin();
+                Fix.Main gw = new Fix.Main(DIRECTORY, mapSelected);
 
             }
         });

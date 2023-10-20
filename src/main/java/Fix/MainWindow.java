@@ -61,7 +61,7 @@ public class MainWindow {
                 IniFile data = new IniFile(file.getAbsolutePath());
                 String section = "main";
                 String name = data.getProperty(section, "name");
-                int type = Integer.parseInt(data.getProperty(section, "type"));
+                int type = 0;
                 int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
                 int atk = Integer.parseInt(data.getProperty(section, "atk"));
                 int mov = Integer.parseInt(data.getProperty(section, "speed"));
@@ -85,7 +85,7 @@ public class MainWindow {
                 IniFile data = new IniFile(file.getAbsolutePath());
                 String section = "main";
                 String name = data.getProperty(section, "name");
-                int type = Integer.parseInt(data.getProperty(section, "type"));
+                int type = 1;
                 int maxHp = Integer.parseInt(data.getProperty(section, "hp"));
                 int atk = Integer.parseInt(data.getProperty(section, "atk"));
                 int mov = Integer.parseInt(data.getProperty(section, "speed"));
@@ -148,7 +148,7 @@ public class MainWindow {
 
 
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle("Game Window");
         frame.setSize(new Dimension(800, 600));
 

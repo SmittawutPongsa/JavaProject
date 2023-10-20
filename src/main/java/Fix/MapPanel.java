@@ -182,7 +182,7 @@ public class MapPanel extends JPanel {
                                 target.unit = null;
                                 if(enemyUnit.isEmpty()){
                                     JFrame frame = new JFrame();
-                                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                                     JLabel label = new JLabel("You win");
                                     frame.add(label);
                                     frame.setSize(new Dimension(200, 100));
@@ -304,7 +304,7 @@ public class MapPanel extends JPanel {
             if(playerUnit.isEmpty()){
                 JFrame frame = new JFrame();
                 JLabel label = new JLabel("You lose");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.setLayout(new FlowLayout());
                 frame.add(label);
                 frame.setSize(new Dimension(200, 100));

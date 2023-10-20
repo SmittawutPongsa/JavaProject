@@ -136,7 +136,7 @@ public class MainWindow {
                         unit = new Unit(units.get(mapData.getProperty("Unit", key)));
                     }
 
-                    grids.put(position[i][j], new Grid(x, y, canPassed, sprite, unit));
+                    grids.put(position[i][j], new Grid(i, j, x, y, canPassed, sprite, unit));
                     x += width;
                 }
                 y += 1.5 * SIZE;

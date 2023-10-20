@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Grid {
+    int gx, gy;
     double x, y;
     Unit unit;
     ImageIcon sprite;
@@ -11,7 +12,9 @@ public class Grid {
     Polygon hexagon;
     Integer size = 30;
 
-    public Grid(double x, double y, Boolean canPassed, ImageIcon sprite, Unit unit){
+    public Grid(int gx, int gy, double x, double y, Boolean canPassed, ImageIcon sprite, Unit unit){
+        this.gx = gx;
+        this.gy = gy;
         this.x = x;
         this.y = y;
         this.canPassed = canPassed;

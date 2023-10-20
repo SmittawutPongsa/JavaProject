@@ -7,15 +7,12 @@ import Hexagon.HexGridPanel;
 import Test.drawPolygonDemo;
 
 import javax.swing.*;
-import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.io.FileOutputStream;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -68,7 +65,7 @@ public class MainWindow extends JFrame implements ActionListener {
     static String attackerSelected;
 
     public MainWindow() {
-        super("PDF Downloader");
+        super("URL Redirector");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Hexagon SRPG Studio");
         this.setPreferredSize(new Dimension(1920, 1080));
@@ -80,7 +77,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
         projectMenu = new JMenu("Project");
         guide = new JMenu("Guide");
-        gDownload = new JMenuItem("Download");
+        gDownload = new JMenuItem("Open");
 
         newProjectMenuItem = new JMenuItem("New Project");
         newProjectMenuItem.addActionListener(this);
@@ -758,33 +755,16 @@ public class MainWindow extends JFrame implements ActionListener {
 
         if (e.getSource() == gDownload) {
 
-            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() {
-                    try {
-                        String pdfUrl = "https://drive.google.com/drive/folders/1lmvyr3vOW7-_Z5v3GUH0bmDBpdma0Ofr?usp=sharing";
-                        URL url = new URL(pdfUrl);
+            openWebpage("https://online.flippingbook.com/view/597092057/");
+        }
+    }
 
-                        // Change the file path as needed
-                        Path outputPath = Path.of("DIRECTORY");
-
-                        // Download file
-                        Files.copy(url.openStream(), outputPath, StandardCopyOption.REPLACE_EXISTING);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        JOptionPane.showMessageDialog(MainWindow.this, "Error downloading PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    JOptionPane.showMessageDialog(MainWindow.this, "PDF Downloaded successfully!");
-                }
-            };
-
-            worker.execute();
+    private void openWebpage(String url) {
+        try {
+            Desktop.getDesktop().browse(new URI(url));
+        } catch (Exception er) {
+            er.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error opening URL: " + er.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
